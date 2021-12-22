@@ -9,7 +9,7 @@ let eventSource: EventSource | null = null
 export default function App() {
   const [announcements, setAnnouncements] = useState<TrainAnnouncement[]>([])
   const [locations, setLocations] = useState<{ [key: string]: string }>({})
-  const [clicked, setClicked] = useState("")
+  const [train, setTrain] = useState("")
 
   useEffect(() => {
     async function fetchLocations() {
@@ -51,7 +51,7 @@ export default function App() {
       }
 
       setAnnouncements(announcements)
-      setClicked("")
+      setTrain("")
     }
   }
 
@@ -73,15 +73,15 @@ export default function App() {
     <div>
       <input
         type="text"
-        value={clicked}
+        value={train}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setClicked(event.target.value)
+          setTrain(event.target.value)
         }}
         onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
-          if (event.key === "Enter") return getCurrent(clicked)()
+          if (event.key === "Enter") return getCurrent(train)()
         }}
       />
-      <span onClick={getCurrent(clicked)}>submit</span>
+      <span onClick={getCurrent(train)}>submit</span>
       <table>
         <tbody>
           <tr>
