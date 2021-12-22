@@ -7,13 +7,13 @@ import TrainAnnouncement from "./TrainAnnouncement"
 let eventSource: EventSource | null = null
 
 type MyState = {
-  response: TrainAnnouncement[]
+  announcements: TrainAnnouncement[]
   locations: { [key: string]: string }
   clicked: string
 }
 
 export default class App extends React.Component<{}, MyState> {
-  state: MyState = { response: [], locations: {}, clicked: "" }
+  state: MyState = { announcements: [], locations: {}, clicked: "" }
 
   async componentDidMount() {
     const response = await fetch("/.netlify/functions/locations")
@@ -39,15 +39,15 @@ export default class App extends React.Component<{}, MyState> {
       )
         .then((response) => response.json())
         .then((json) => {
-          const response = json.TrainAnnouncement
+          const announcements = json.TrainAnnouncement
 
           if (json.INFO) {
             if (eventSource) eventSource.close()
             eventSource = new EventSource(json.INFO.SSEURL)
             eventSource.onmessage = (event) => {
               const parsed = JSON.parse(event.data)
-              this.setState(({ response }: MyState) => ({
-                response: response.concat(
+              this.setState(({ announcements }: MyState) => ({
+                announcements: announcements.concat(
                   parsed.RESPONSE.RESULT[0].TrainAnnouncement
                 ),
               }))
@@ -55,7 +55,7 @@ export default class App extends React.Component<{}, MyState> {
           }
 
           this.setState({
-            response,
+            announcements,
             clicked: "",
           })
         })
@@ -64,7 +64,7 @@ export default class App extends React.Component<{}, MyState> {
 
   render() {
     const sorted: TrainAnnouncement[] = _.orderBy(
-      this.state.response,
+      this.state.announcements,
       "AdvertisedTimeAtLocation"
     )
 
