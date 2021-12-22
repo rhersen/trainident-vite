@@ -30,9 +30,7 @@ export default function App() {
   }, [])
 
   function getCurrent(trainId: string) {
-    return async (ev: any) => {
-      if (ev.key && ev.key !== "Enter") return
-
+    return async () => {
       const until = formatISO(endOfDay(addDays(new Date(), 1))).slice(0, 19)
 
       const response = await fetch(
@@ -76,10 +74,12 @@ export default function App() {
       <input
         type="text"
         value={clicked}
-        onChange={(event: any) => {
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setClicked(event.target.value)
         }}
-        onKeyPress={getCurrent(clicked)}
+        onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
+          if (event.key === "Enter") return getCurrent(clicked)()
+        }}
       />
       <span onClick={getCurrent(clicked)}>submit</span>
       <table>
