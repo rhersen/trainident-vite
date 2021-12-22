@@ -96,12 +96,12 @@ export default function App() {
             })}
           </tr>
           {_.map(rowKeys, (rowKey) => {
-            const strings = rowKey.split(":")
+            const [activity, signature] = rowKey.split(":")
             return (
               <tr key={rowKey}>
                 <td>
-                  {strings[0] === "Avgang" ? "" : strings[0]}{" "}
-                  {locations[strings[1]] ? locations[strings[1]] : strings[1]}
+                  {activity === "Avgang" ? "" : activity}{" "}
+                  {locations[signature] ? locations[signature] : signature}
                 </td>
                 {_.map(colKeys, (colKey) => {
                   const cell = cells[rowKey + colKey]
