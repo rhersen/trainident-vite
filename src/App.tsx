@@ -6,14 +6,14 @@ import TrainAnnouncement from "./TrainAnnouncement"
 
 let eventSource: EventSource | null = null
 
-type MyState = {
+type AppState = {
   announcements: TrainAnnouncement[]
   locations: { [key: string]: string }
   clicked: string
 }
 
-export default class App extends React.Component<{}, MyState> {
-  state: MyState = { announcements: [], locations: {}, clicked: "" }
+export default class App extends React.Component<{}, AppState> {
+  state: AppState = { announcements: [], locations: {}, clicked: "" }
 
   async componentDidMount() {
     const response = await fetch("/.netlify/functions/locations")
@@ -45,7 +45,7 @@ export default class App extends React.Component<{}, MyState> {
         eventSource = new EventSource(json.INFO.SSEURL)
         eventSource.onmessage = (event) => {
           const parsed = JSON.parse(event.data)
-          this.setState(({ announcements }: MyState) => ({
+          this.setState(({ announcements }) => ({
             announcements: announcements.concat(
               parsed.RESPONSE.RESULT[0].TrainAnnouncement
             ),
