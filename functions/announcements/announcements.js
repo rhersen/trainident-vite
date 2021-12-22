@@ -1,6 +1,5 @@
-import fetch from "node-fetch";
-
-export async function handler({queryStringParameters}) {
+const fetch = require("node-fetch");
+exports.handler = async function({ queryStringParameters }) {
   try {
     const response = await fetch(
       "https://api.trafikinfo.trafikverket.se/v2/data.json",
@@ -34,7 +33,7 @@ export async function handler({queryStringParameters}) {
       body: JSON.stringify({ msg: err.message }) // Could be a custom message or object i.e. JSON.stringify(err)
     };
   }
-}
+};
 
 function getBody({ trainId, until }) {
   return `
