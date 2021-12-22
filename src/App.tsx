@@ -29,36 +29,34 @@ export default class App extends React.Component<{}, MyState> {
   }
 
   getCurrent(trainId: string) {
-    return (ev: any) => {
+    return async (ev: any) => {
       if (ev.key && ev.key !== "Enter") return
 
       const until = formatISO(endOfDay(addDays(new Date(), 1))).slice(0, 19)
 
-      fetch(
+      const response = await fetch(
         `/.netlify/functions/announcements?trainId=${trainId}&until=${until}`
       )
-        .then((response) => response.json())
-        .then((json) => {
-          const announcements = json.TrainAnnouncement
+      const json = await response.json()
+      const announcements = json.TrainAnnouncement
 
-          if (json.INFO) {
-            if (eventSource) eventSource.close()
-            eventSource = new EventSource(json.INFO.SSEURL)
-            eventSource.onmessage = (event) => {
-              const parsed = JSON.parse(event.data)
-              this.setState(({ announcements }: MyState) => ({
-                announcements: announcements.concat(
-                  parsed.RESPONSE.RESULT[0].TrainAnnouncement
-                ),
-              }))
-            }
-          }
+      if (json.INFO) {
+        if (eventSource) eventSource.close()
+        eventSource = new EventSource(json.INFO.SSEURL)
+        eventSource.onmessage = (event) => {
+          const parsed = JSON.parse(event.data)
+          this.setState(({ announcements }: MyState) => ({
+            announcements: announcements.concat(
+              parsed.RESPONSE.RESULT[0].TrainAnnouncement
+            ),
+          }))
+        }
+      }
 
-          this.setState({
-            announcements,
-            clicked: "",
-          })
-        })
+      this.setState({
+        announcements,
+        clicked: "",
+      })
     }
   }
 
