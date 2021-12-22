@@ -15,12 +15,10 @@ type MyState = {
 export default class App extends React.Component<{}, MyState> {
   state: MyState = { response: [], locations: {}, clicked: "" }
 
-  componentDidMount() {
-    fetch("/.netlify/functions/locations")
-      .then((response) => response.json())
-      .then((locations) => {
-        this.setState({ locations })
-      })
+  async componentDidMount() {
+    const response = await fetch("/.netlify/functions/locations")
+    const locations = await response.json()
+    this.setState({ locations })
   }
 
   componentWillUnmount() {
