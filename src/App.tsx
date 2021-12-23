@@ -44,8 +44,8 @@ export default function App() {
         eventSource = new EventSource(json.INFO.SSEURL)
         eventSource.onmessage = (event) => {
           const parsed = JSON.parse(event.data)
-          setAnnouncements(
-            announcements.concat(parsed.RESPONSE.RESULT[0].TrainAnnouncement)
+          setAnnouncements((prev) =>
+            prev.concat(parsed.RESPONSE.RESULT[0].TrainAnnouncement)
           )
         }
       }
