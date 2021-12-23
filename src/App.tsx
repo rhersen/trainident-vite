@@ -89,8 +89,8 @@ export default function App() {
             {_.map(colKeys, (colKey) => {
               return (
                 <React.Fragment key={colKey}>
-                  <th />
                   <th>{colKey.slice(8)}</th>
+                  <th />
                 </React.Fragment>
               )
             })}
@@ -99,7 +99,7 @@ export default function App() {
             const [activity, signature] = rowKey.split(":")
             return (
               <tr key={rowKey}>
-                <td>
+                <td className={activity}>
                   {activity === "Avgang" ? "" : activity}{" "}
                   {locations[signature] ? locations[signature] : signature}
                 </td>
@@ -108,7 +108,7 @@ export default function App() {
                   if (!cell)
                     return (
                       <React.Fragment key={colKey}>
-                        <td />
+                        <td className="actual" />
                         <td />
                       </React.Fragment>
                     )
@@ -116,7 +116,7 @@ export default function App() {
                   const a = cell.AdvertisedTimeAtLocation
                   return (
                     <React.Fragment key={colKey}>
-                      <td>{t ? t.slice(11, 19) : "-"}</td>
+                      <td className="actual">{t ? t.slice(11, 19) : "-"}</td>
                       <td>{a ? a.slice(11, 16) : "-"}</td>
                     </React.Fragment>
                   )
