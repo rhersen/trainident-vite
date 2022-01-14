@@ -81,7 +81,7 @@ export default function App() {
           if (event.key === "Enter") return getCurrent(train)()
         }}
       />
-      <span onClick={getCurrent(train)}>submit</span>
+      <span onClick={getCurrent(train)}>OK</span>
       <table>
         <tbody>
           <tr>
